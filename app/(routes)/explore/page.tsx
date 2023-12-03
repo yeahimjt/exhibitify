@@ -1,6 +1,10 @@
+'use client';
+
 import CategoryButton from '@/app/components/categorybutton';
 import PostPreview from '@/app/components/custom/postpreview';
+import Footer from '@/app/components/footer';
 import NavBar from '@/app/components/navbar';
+import { auth } from '@/app/firebase';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -13,10 +17,13 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-const page = () => {
+const Page = () => {
+  const [user] = useAuthState(auth);
+  console.log(user);
   return (
-    <main>
+    <main className=''>
       <NavBar />
       <header className='mt-[142px]'>
         <section className='component-style space-y-4  rounded-[40px] p-8'>
@@ -67,4 +74,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

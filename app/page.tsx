@@ -23,7 +23,7 @@ export default function Home() {
           </span>
           <CtaButton action={'Start Now'} redirect={'/sign-up'} />
         </section>
-        <section className=' -top-32 -z-10 col-span-1 2xl:absolute 2xl:right-0  2xl:top-32 2xl:w-fit'>
+        <section className=' -top-32 -z-10 col-span-1 2xl:absolute 2xl:-right-12  2xl:top-32 2xl:w-fit'>
           <Image
             className='absolute right-0 top-[600px] pl-4 lg:pl-0 2xl:relative 2xl:top-[0px]'
             src='/images/header.png'

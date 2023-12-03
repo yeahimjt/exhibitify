@@ -3,10 +3,10 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className='mt-[200px] flex flex-wrap gap-[140px]'>
+    <footer className='mb-[100px] mt-[200px] flex flex-wrap gap-[140px]'>
       <section className='flex flex-col justify-between gap-[5px]'>
         <span className='flex flex-col gap-[5px]'>
-          <h5>exhibity</h5>
+          <h5 className='font-extrabold'>exhibity</h5>
           <p>United States</p>
           <p>English</p>
         </span>
