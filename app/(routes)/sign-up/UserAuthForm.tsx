@@ -10,6 +10,10 @@ import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -25,8 +29,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-
+    createUserWithEmailAndPassword(auth, email, password);
     // Create authenticated user within firebase project
+    setIsLoading(false);
   }
 
   const handleGoogleAuth = async () => {
@@ -36,7 +41,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     //   setIsLoading(false);
     // }
   };
-  console.log(userGoogle);
+  console.log(email, password);
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={onSubmit}>
@@ -54,6 +59,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect='off'
               disabled={isLoading}
               required
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className='grid gap-1'>
@@ -69,6 +75,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect='off'
               disabled={isLoading}
               required
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <Button
@@ -77,7 +84,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             type='submit'
           >
             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
-            Sign In with Email
+            Sign Up with Email
           </Button>
         </div>
       </form>
@@ -86,7 +93,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <span className='w-full border-t' />
         </div>
         <div className='relative flex justify-center text-xs uppercase'>
-          <span className='bg-light-bg px-2 '>Or continue with</span>
+          <span className='bg-light-bg px-2 dark:bg-dark-bg '>
+            Or continue with
+          </span>
         </div>
       </div>
       <Button

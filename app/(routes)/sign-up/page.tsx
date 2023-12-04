@@ -18,7 +18,7 @@ const page = () => {
           Login
         </Link>
         <div className='relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex'>
-          <div className='absolute inset-0 bg-dark-bg' />
+          <div className='absolute inset-0 bg-dark-bg dark:bg-light-bg' />
           <Link
             href='/'
             className='relative z-20 flex items-center text-lg font-extrabold'

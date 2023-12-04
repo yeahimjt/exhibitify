@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import React from 'react';
-import CtaButton from './custom/cta';
+import CtaButton from '../custom/cta';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import Conditional from './conditional';
 
 const NavBar = () => {
   return (
-    <nav className='absolute left-0 top-0 flex w-screen items-center justify-between bg-white py-[20px] shadow-sm'>
-      <section className='mx-auto flex w-full max-w-[1024px] items-center justify-between px-[40px] lg:px-[0px]'>
+    <nav className=' dark:bg-dark-accent flex w-screen items-center justify-between bg-white py-[20px] shadow-sm'>
+      <section className='mx-auto flex w-full max-w-[1024px] items-center justify-between px-[0px]'>
         <section className='flex gap-[30px]'>
           <Link
             href='/'
@@ -34,7 +37,7 @@ const NavBar = () => {
             </Link>
           </span>
         </section>
-        <CtaButton action={'Sign Up'} redirect={'/sign-up'} />
+        <Conditional />
       </section>
     </nav>
   );

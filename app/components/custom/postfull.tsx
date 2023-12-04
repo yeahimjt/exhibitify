@@ -7,7 +7,7 @@ import React from 'react';
 
 const PostFull = () => {
   return (
-    <section className='component-style flex w-full gap-[10px]  rounded-[10px] p-8 dark:bg-dark-less-text'>
+    <section className='component-style dark:bg-dark-accent flex w-full  gap-[10px] rounded-[10px] p-8'>
       <div className='w-[50px]'>
         <User size={42} />
       </div>

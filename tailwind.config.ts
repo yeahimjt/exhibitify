@@ -28,6 +28,7 @@ module.exports = {
         'dark-subtitle': '#B0B0B0',
         'dark-reg-text': '#808080',
         'dark-less-text': '#555555',
+        'dark-accent': '#191919',
 
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
