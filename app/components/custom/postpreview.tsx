@@ -10,7 +10,7 @@ const PostPreview = () => {
   return (
     <Link
       href='/posts/1'
-      className='dark:bg-dark-accent flex w-full gap-[10px] rounded-[10px] border border-light-less-text p-[12px] transition-all hover:shadow-md dark:border-dark-less-text  dark:hover:border-light-less-text'
+      className='flex w-full gap-[10px] rounded-[10px] border border-light-less-text p-[12px] transition-all hover:border-dark-less-text hover:shadow-md dark:border-dark-less-text dark:bg-dark-accent  dark:hover:border-light-less-text'
     >
       <div className='w-[50px]'>
         <User size={42} />

@@ -8,12 +8,10 @@ interface FeatureProps {
 }
 const Feature = ({ subTitle, title, description, imageURL }: FeatureProps) => {
   return (
-    <section className='component-style dark:bg-dark-accent flex  flex-col gap-[50px] rounded-[40px] bg-white p-8 lg:flex-row lg:gap-[150px]'>
+    <section className='component-style flex flex-col  gap-[50px] rounded-[40px] bg-white p-8 dark:bg-dark-accent lg:flex-row lg:gap-[150px]'>
       <span className='flex-[0.5] items-center space-y-4 '>
         <h3>{subTitle}</h3>
-        <h5 className='text-[24px] font-bold text-light-title dark:text-dark-title'>
-          {title}
-        </h5>
+        <h5 className='title'>{title}</h5>
 
         <p>{description}</p>
       </span>
