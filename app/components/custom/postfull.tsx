@@ -70,7 +70,7 @@ const PostFull = () => {
                 {post?.title}
               </h5>
             ) : (
-              <Skeleton className='h-[24px] w-full' />
+              <Skeleton className='mb-1 h-[24px] w-full' />
             )}
           </div>
           <span>
@@ -99,9 +99,9 @@ const PostFull = () => {
         {post ? (
           <p className=' truncate  text-[14px]'>{post?.description}</p>
         ) : (
-          <Skeleton className='h-[20px] w-full' />
+          <Skeleton className='mb-1 h-[20px] w-full' />
         )}
-        {post && (
+        {post ? (
           <Image
             className='pb-4'
             src={post?.image}
@@ -109,6 +109,8 @@ const PostFull = () => {
             height={300}
             alt='portfolio image'
           />
+        ) : (
+          <Skeleton className='h-[300px] w-[512px]' />
         )}
         <span className='flex space-x-4'>
           <button className='group flex items-center space-x-2'>

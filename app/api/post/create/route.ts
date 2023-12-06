@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       owner: user_id,
       displayName: display_name,
       timestamp: serverTimestamp(),
-      likes: 0,
+      likes: [],
       comments: [],
     });
 

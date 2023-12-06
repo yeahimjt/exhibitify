@@ -14,14 +14,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
+type AsyncFunctionType = (
+  e: React.SyntheticEvent,
+  index: number,
+  post_id: string
+) => Promise<any>;
 type PostPreviewProps = {
   type: 'user' | 'general';
   post: Posts;
+  handleLike: AsyncFunctionType;
+  index: number;
 };
 
-const PostPreview = ({ type, post }: PostPreviewProps) => {
+const PostPreview = ({ type, post, handleLike, index }: PostPreviewProps) => {
   const [user] = useAuthState(auth);
+
   return (
     <Link
       href={`/posts/${post.id}`}
@@ -64,10 +71,21 @@ const PostPreview = ({ type, post }: PostPreviewProps) => {
           alt='portfolio image'
         />
         <span className=' flex space-x-4'>
-          <button className='group flex items-center space-x-2'>
-            <HeartOff className='text-red-500' />
+          <button
+            className='group flex items-center space-x-2'
+            onClick={(e) => handleLike(e, index, post.id)}
+          >
+            {user ? (
+              post.likes.includes(user?.uid) ? (
+                <Heart className='text-red-500' />
+              ) : (
+                <HeartOff className='text-red-500' />
+              )
+            ) : (
+              <HeartOff className='text-red-500' />
+            )}
             <h4 className='mt-[2px] text-[14px] group-hover:underline'>
-              {post.likes} Likes
+              {post.likes.length} Likes
             </h4>
           </button>
           <button className='group flex items-center space-x-2'>

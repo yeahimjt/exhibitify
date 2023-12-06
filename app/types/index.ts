@@ -13,7 +13,7 @@ export type Posts = {
   url: string;
   displayName: string;
   comments: string[];
-  likes: number;
+  likes: string[];
   timestamp: FirebaseFirestore.Timestamp;
   id: string;
   photoURL: string;

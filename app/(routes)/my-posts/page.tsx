@@ -18,7 +18,7 @@ const page = () => {
   return (
     <>
       <NavBar />
-      <main className='mt-[94px] space-y-4'>
+      <main className='mb-[40px] mt-[94px] space-y-4'>
         <h5 className='title'>My Posts</h5>
         <Separator />
         <PostPreviewContainer type={'user'} />

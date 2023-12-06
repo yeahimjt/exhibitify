@@ -12,10 +12,12 @@ import {
 } from '@/components/ui/select';
 import React, { useEffect, useState } from 'react';
 import PostPreview from './custom/postpreview';
-import { FilterTypes, PostsList } from '../types';
+import { FilterTypes, Posts, PostsList } from '../types';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
+import { auth, firestore } from '../firebase';
 import { useInView } from 'react-intersection-observer';
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { Loader } from 'lucide-react';
 
 interface PostPreviewContainerProps {
   type: 'user' | 'general';
@@ -36,12 +38,29 @@ const PostPreviewContainer = ({
 
   const { ref, inView } = useInView();
 
-  // Update filter
+  // Handle user selecting a different category.
+  useEffect(() => {
+    setPosts(null);
+    setOffset(null);
+    handlePosts();
+  }, [category]);
+
+  // User has scrolled to end of page, retrieve more posts if possible.
+  useEffect(() => {
+    if (inView) {
+      handlePosts();
+    }
+  }, [inView]);
+
+  // Update select filter
   const handleFilterChange = (value: FilterTypes) => {
     setFilter(value);
   };
 
+  // Retrieve posts of specific user, category, or filter, increment posts recieved to enable infinite scrolling.
   async function handlePosts() {
+    // Initialize loading spinner
+    setLoading(true);
     let url = '/api/post/get';
 
     const params = new URLSearchParams();
@@ -66,22 +85,61 @@ const PostPreviewContainer = ({
 
       setOffset(responseData.lastVisibleId);
     }
-  }
-  console.log(offset);
-  // Handle user selecting a different filter, or category by retrieving its posts.
-  useEffect(() => {
-    if (!filter && !category) return;
-    handlePosts();
-  }, [filter, category]);
 
-  useEffect(() => {
-    if (inView) {
-      handlePosts();
+    setLoading(false);
+  }
+
+  // User has clicked like button of a post, handle whether they like it or unlike it and update accordingly
+  const handleLike = async (
+    e: React.SyntheticEvent,
+    index: number,
+    post_id: string
+  ) => {
+    e.preventDefault();
+    if (!user || !posts) {
+      return;
     }
-  }, [inView]);
-  console.log(posts, offset);
+
+    const docSnap = doc(firestore, 'posts', post_id);
+    const isUserLiked = posts[index].likes.includes(user.uid);
+
+    if (isUserLiked) {
+      // Remove user from like array in database
+      await updateDoc(docSnap, {
+        likes: arrayRemove(user?.uid),
+      });
+      // Update local posts to remove user
+      const updatedLikes = posts[index].likes.filter(
+        (userLiked) => userLiked !== user?.uid
+      );
+      setPosts((prevPosts) => {
+        if (prevPosts === null) {
+          return prevPosts;
+        }
+        const updatedPosts = [...prevPosts];
+        updatedPosts[index] = { ...updatedPosts[index], likes: updatedLikes };
+        return updatedPosts;
+      });
+    } else {
+      // Add user to like array in database
+      await updateDoc(docSnap, {
+        likes: arrayUnion(user?.uid),
+      });
+      // Update local posts to add user
+      const updatedLikes = [...posts[index].likes, user?.uid];
+      setPosts((prevPosts) => {
+        if (prevPosts === null) {
+          return prevPosts;
+        }
+        const updatedPosts = [...prevPosts];
+        updatedPosts[index] = { ...updatedPosts[index], likes: updatedLikes };
+        return updatedPosts;
+      });
+    }
+  };
+
   return (
-    <div className='component-style mt-[20px] select-none space-y-4 rounded-[40px] bg-white p-8 dark:bg-dark-accent'>
+    <div className='component-style mb-[40px] mt-[20px] select-none space-y-4 rounded-[40px] bg-white p-8 dark:bg-dark-accent'>
       <span className='text-light-reg-text dark:text-dark-reg-text'>
         <Label className=''>Sort</Label>
         <Select onValueChange={handleFilterChange}>
@@ -110,13 +168,25 @@ const PostPreviewContainer = ({
       <div className='flex flex-col gap-8'>
         {posts &&
           posts?.map((post, index) => (
-            <PostPreview key={index} post={post} type={type} />
+            <PostPreview
+              key={index}
+              post={post}
+              type={type}
+              index={index}
+              handleLike={handleLike}
+            />
           ))}
       </div>
       {/* Buffer zone */}
-      <div className='h-[100px] bg-white/50'></div>
+      <div className='h-[100px]'></div>
       {/* Loading area */}
-      <div ref={ref}>{loading ? 'loading' : ''}</div>
+      <div className='flex items-center justify-center' ref={ref}>
+        {loading ? (
+          <Loader className='animate-spin' />
+        ) : (
+          <div className='h-[22px] w-full'></div>
+        )}
+      </div>
     </div>
   );
 };

@@ -29,11 +29,10 @@ export async function GET(req: NextRequest) {
   if (user_id) {
     conditions.push(where('owner', '==', user_id));
   }
-  if (category) {
-    // postsQuery = query(postsQuery, where('category', '==', category))
+  if (category && category !== 'all') {
+    console.log(category);
     conditions.push(where('category', 'array-contains', category));
   }
-  console.log(offset);
   try {
     let q;
     if (conditions.length > 0) {
