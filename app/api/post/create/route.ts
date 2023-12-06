@@ -1,5 +1,12 @@
 import { firestore } from '@/app/firebase';
-import { addDoc, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   const {
@@ -9,9 +16,11 @@ export async function POST(req: Request) {
     portfolio_url,
     portfolio_image,
     user_id,
+    display_name,
   } = await req.json();
   const postsCollection = collection(firestore, 'posts');
   try {
+    // Create new post
     const postDocSnap = await addDoc(postsCollection, {
       title,
       description,
@@ -19,12 +28,21 @@ export async function POST(req: Request) {
       url: portfolio_url,
       image: portfolio_image,
       owner: user_id,
+      displayName: display_name,
+      timestamp: serverTimestamp(),
+      likes: 0,
+      comments: [],
     });
+
+    // Update post to include post id for future reference
+    const createdDoc = doc(firestore, 'posts', postDocSnap.id);
+    await updateDoc(createdDoc, { id: postDocSnap.id });
     return NextResponse.json(
       { status: 'success', post_id: postDocSnap.id },
       { status: 200 }
     );
   } catch (error: any) {
+    console.log(error);
     return NextResponse.json(
       { status: 'failed', post_id: null },
       { status: 400 }

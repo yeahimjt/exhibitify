@@ -69,7 +69,9 @@ const Page = () => {
         category: selected,
         portfolio_url: portfolioURL,
         portfolio_image: imageURL,
+        display_name: user?.displayName,
         user_id: user?.uid,
+        photoURL: user?.photoURL,
       }),
     });
     const responseData = await response.json();

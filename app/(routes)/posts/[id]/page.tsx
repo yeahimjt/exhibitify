@@ -1,8 +1,17 @@
+'use client';
 import PostFull from '@/app/components/custom/postfull';
 import NavBar from '@/app/components/navbar/navbar';
-import React from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 
-const page = () => {
+const Page = () => {
+  const pathName = usePathname();
+  let post_id = pathName.split('/')[2];
+
+  useEffect(() => {
+    if (post_id) {
+    }
+  }, [post_id]);
   return (
     <>
       <NavBar />
@@ -15,4 +24,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import {
+  BookOpen,
+  Heart,
   LogOut,
   Mail,
   MoonIcon,
@@ -73,16 +75,35 @@ const Conditional = () => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className='cursor-pointer'>
-                <User className='mr-2 h-4 w-4' />
-                <span>Profile</span>
-                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem className='cursor-pointer'>
-                <Settings className='mr-2 h-4 w-4' />
-                <span>Settings</span>
-                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-              </DropdownMenuItem>
+              <Link href='/my-posts'>
+                <DropdownMenuItem className='cursor-pointer'>
+                  <BookOpen className='mr-2 h-4 w-4' />
+                  <span>My Posts</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href='/liked-posts'>
+                <DropdownMenuItem className='cursor-pointer'>
+                  <Heart className='mr-2 h-4 w-4' />
+                  <span>Liked Posts</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <Link href='/profile'>
+                <DropdownMenuItem className='cursor-pointer'>
+                  <User className='mr-2 h-4 w-4' />
+                  <span>Profile</span>
+                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </Link>
+              <Link href='/settings'>
+                <DropdownMenuItem className='cursor-pointer'>
+                  <Settings className='mr-2 h-4 w-4' />
+                  <span>Settings</span>
+                  <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem
                 className='cursor-pointer'
                 onClick={() =>

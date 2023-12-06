@@ -112,5 +112,5 @@ p {
 }
 
 .component-style {
-  @apply border border-light-reg-text/10 bg-white shadow-sm dark:border-dark-reg-text/50;
+  @apply border border-light-reg-text/10 bg-white shadow-sm dark:border-dark-reg-text/10;
 }
