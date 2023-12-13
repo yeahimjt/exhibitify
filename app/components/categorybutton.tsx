@@ -38,9 +38,7 @@ const CategoryButton = ({
       if (docSnap.empty) return;
 
       setPostCount(docSnap.size);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
   useEffect(() => {
     handleCountPosts();

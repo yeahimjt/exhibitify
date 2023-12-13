@@ -42,22 +42,18 @@ const PostPreviewContainer = ({
 
   // Handle user selecting a different category.
   useEffect(() => {
-    console.log('calling from category');
     setPosts(null);
     setOffset(null);
   }, [category]);
 
   useEffect(() => {
-    console.log(posts, offset);
     if (posts === null && offset === null) {
-      console.log('caling handle post');
       handlePosts();
     }
   }, [posts, offset]);
 
   useEffect(() => {
     if (refresh) {
-      console.log('calling from refresh');
       setPosts(null);
       setOffset(null);
       handlePosts();
@@ -67,14 +63,12 @@ const PostPreviewContainer = ({
   // User has scrolled to end of page, retrieve more posts if possible.
   useEffect(() => {
     if (inView && !refresh) {
-      console.log('calling from inview');
       handlePostsInView();
     }
   }, [inView]);
 
   // Retrieve posts of specific user, category, or filter, increment posts recieved to enable infinite scrolling.
   async function handlePosts() {
-    console.log(category);
     // Initialize loading spinner
     setLoading(true);
     setRefresh(false);
@@ -91,7 +85,6 @@ const PostPreviewContainer = ({
       // This is the intial state that is reached when a user selects a new category
       if (inView && !posts) {
       } else {
-        console.log('in else');
         params.append('offset', offset);
       }
     }
@@ -110,13 +103,12 @@ const PostPreviewContainer = ({
             ? [...posts, ...responseData.posts]
             : [...responseData.posts];
         setPosts(combinedPosts);
-        console.log(posts);
+
         setOffset(responseData.lastVisibleId);
       } else {
         setPosts([]);
       }
     } catch (error: any) {
-      console.log(error);
       setPosts([]);
     }
 
@@ -124,7 +116,6 @@ const PostPreviewContainer = ({
   }
 
   async function handlePostsInView() {
-    console.log(category);
     // Initialize loading spinner
     setLoading(true);
     setRefresh(false);
@@ -141,7 +132,6 @@ const PostPreviewContainer = ({
       // This is the intial state that is reached when a user selects a new category
       if (inView && !posts) {
       } else {
-        console.log('in else');
         params.append('offset', offset);
       }
     }
@@ -160,13 +150,12 @@ const PostPreviewContainer = ({
             ? [...posts, ...responseData.posts]
             : [...responseData.posts];
         setPosts(combinedPosts);
-        console.log(posts);
+
         setOffset(responseData.lastVisibleId);
       } else {
         // setPosts([]);
       }
     } catch (error: any) {
-      console.log(error);
       setPosts([]);
     }
 
@@ -240,7 +229,7 @@ const PostPreviewContainer = ({
       });
     }
   };
-  console.log(posts);
+
   return (
     <div className='component-style mb-[40px] mt-[20px] select-none space-y-4 rounded-[40px] bg-white p-8 dark:bg-dark-accent'>
       {type === 'user' ? (

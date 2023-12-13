@@ -31,13 +31,12 @@ export async function POST(req: Request) {
       owner: user_id,
       displayName: display_name,
     });
-    console.log(postDocSnap);
+
     return NextResponse.json(
       { status: 'success', post_id: post_id },
       { status: 200 }
     );
   } catch (error: any) {
-    console.log(error);
     return NextResponse.json(
       { status: 'failed', post_id: null },
       { status: 400 }

@@ -46,7 +46,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         email,
         password
       );
-      console.log(response.operationType);
+
       toast({
         title: 'Sign in success',
         description: 'You have been authenticated',
@@ -56,7 +56,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       const error_object = FIREBASE_ERRORS.filter(
         (firebase_error) => firebase_error.code === error.code
       );
-      console.log(error_object);
+
       toast({
         title: error_object[0].title,
         description: error_object[0].description,
@@ -73,7 +73,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     //   setIsLoading(false);
     // }
   };
-  console.log(email, password);
 
   async function handleDisplayName() {
     // Update local profile
@@ -95,7 +94,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   // When user sign's up, redirect them to home
   React.useEffect(() => {
     if (user) {
-      console.log(user);
       if (!user?.displayName && displayName) {
         handleDisplayName();
       } else {
@@ -103,7 +101,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       }
     }
   }, [user]);
-  console.log(errorGoogle);
+
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={onSubmit}>

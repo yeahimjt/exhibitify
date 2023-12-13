@@ -25,7 +25,6 @@ interface PostMenuProps {
   comment_id: string;
 }
 const CommentMenu = ({ comment_id }: PostMenuProps) => {
-  console.log(comment_id);
   const router = useRouter();
   const [user] = useAuthState(auth);
 
@@ -54,7 +53,6 @@ const CommentMenu = ({ comment_id }: PostMenuProps) => {
           description: 'We will look into it immediately',
         });
       }
-      console.log(responseData);
     } catch (error) {
       return;
     }

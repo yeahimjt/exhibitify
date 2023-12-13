@@ -32,7 +32,6 @@ const Page = () => {
       }),
     });
     if (response) {
-      console.log(response);
       const responseData = await response.json();
       setPost(responseData);
     }

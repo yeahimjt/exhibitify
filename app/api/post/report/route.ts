@@ -40,7 +40,6 @@ export async function POST(req: Request) {
       });
       return NextResponse.json({ status: true });
     } catch (error) {
-      console.log(error);
       return NextResponse.json({ status: false });
     }
   }
@@ -68,7 +67,6 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ status: true });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ status: false });
   }
 }

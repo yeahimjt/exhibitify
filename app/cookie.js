@@ -9,6 +9,6 @@ export const setImpressionCookie = (postId) => {
 
 export const hasImpressionCookie = (postId) => {
   const impression = Cookies.get(`${COOKIE_NAME}_${postId}`) === 'true';
-  console.log(impression);
+
   return impression;
 };

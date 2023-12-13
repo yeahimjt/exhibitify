@@ -119,7 +119,6 @@ const PostForm = ({ type, post }: PostFormProps) => {
   // Validate users portfolio url
   async function validateUrl() {
     if (!portfolioURL) {
-      console.log('no url given');
       return;
     }
     setVerified(null);
@@ -136,7 +135,7 @@ const PostForm = ({ type, post }: PostFormProps) => {
         }),
       });
       const url = await response.json();
-      console.log(url);
+
       if (url) {
         setVerified(true);
         setVerifying(false);

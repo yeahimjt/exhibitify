@@ -16,7 +16,6 @@ import { NextResponse, NextRequest } from 'next/server';
 export async function GET(req: NextRequest) {
   const post_id = req.nextUrl.searchParams.get('post_id');
   if (!post_id) {
-    console.log('in post_id not sent');
     return NextResponse.json({ comments: null }, { status: 400 });
   }
   try {
@@ -28,7 +27,6 @@ export async function GET(req: NextRequest) {
     const postsCommentsSnap = await getDocs(q);
 
     if (postsCommentsSnap.empty) {
-      console.log(' in empty');
       return NextResponse.json({ comments: null }, { status: 400 });
     }
 
@@ -43,10 +41,9 @@ export async function GET(req: NextRequest) {
         id: comment.id,
       })
     );
-    console.log(postsComments);
+
     return NextResponse.json({ comments: postsComments }, { status: 200 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ comments: null }, { status: 400 });
   }
 }

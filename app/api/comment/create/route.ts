@@ -20,7 +20,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(commentDocSnap.data(), { status: 200 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ status: 400 });
   }
 }

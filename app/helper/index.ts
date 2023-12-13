@@ -84,13 +84,13 @@ export async function updateUserProfile(
   user_id: string
 ) {
   const userDoc = doc(firestore, 'users', user_id);
-  console.log(' in here');
+
   // Get user document data to get their current name/photo.
   // If one of the fields is not updated use current data
-  console.log('name in here:', name);
+
   try {
     const usersData = await getDoc(userDoc);
-    console.log('userDocData: ', usersData.data());
+
     if (!usersData.exists()) return;
     await updateDoc(userDoc, {
       displayName: name ? name : usersData.data().displayName,
@@ -98,7 +98,6 @@ export async function updateUserProfile(
     });
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 }
@@ -133,7 +132,6 @@ export async function handleReport(
 
       return true;
     } catch (error) {
-      console.log(error);
       return false;
     }
   }
@@ -154,7 +152,31 @@ export async function handleReport(
 
     return true;
   } catch (error) {
-    console.log(error);
+    return;
+  }
+}
+
+export async function handleNewsLetter(email_address: string | null) {
+  if (!email_address) return;
+
+  try {
+    const newsLetterCollection = query(
+      collection(firestore, 'newsletter'),
+      where('users', 'array-contains', 'yeahimjt@gmail.com')
+    );
+    const newsLetterCollectionSnap = await getDocs(newsLetterCollection);
+    if (newsLetterCollectionSnap.empty) return;
+
+    const newsletterDoc = doc(
+      firestore,
+      'newsletter',
+      newsLetterCollectionSnap.docs[0].id
+    );
+    const newsLetterSnap = await updateDoc(newsletterDoc, {
+      users: arrayUnion(email_address),
+    });
+    return true;
+  } catch (error) {
     return;
   }
 }

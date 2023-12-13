@@ -32,7 +32,6 @@ export async function GET(req: NextRequest) {
     conditions.push(where('owner', '==', user_id));
   }
   if (category && category !== 'all') {
-    console.log(category);
     conditions.push(where('category', 'array-contains', category));
   }
 
@@ -45,7 +44,6 @@ export async function GET(req: NextRequest) {
     if (conditions.length > 0) {
       q = query(collection(firestore, 'posts'), ...conditions, limit(limitNum));
     } else {
-      console.log('in here');
       q = query(collection(firestore, 'posts'), limit(limitNum));
     }
     const snapshot = await getDocs(q);
@@ -65,8 +63,6 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.log('in error');
-    console.log(error);
     return NextResponse.json({ posts: [] }, { status: 400 });
   }
 }

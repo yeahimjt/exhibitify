@@ -43,7 +43,7 @@ const Comments = ({ post_id }: CommentSectionProps) => {
     if (searchParams.toString()) {
       url += `?${searchParams.toString()}`;
     }
-    console.log(url);
+
     const response = await fetch(url);
     const responseData = await response.json();
     setComments(responseData.comments);
@@ -73,7 +73,7 @@ const Comments = ({ post_id }: CommentSectionProps) => {
       }),
     });
     const responseData = await response.json();
-    console.log(responseData);
+
     setComments((prevComments) => {
       // If no comments are on the post the user is commenting on, then create a new comments array
       if (!prevComments) return [responseData];
@@ -87,7 +87,7 @@ const Comments = ({ post_id }: CommentSectionProps) => {
       description: 'Viewable by others now.',
     });
   }
-  console.log(comments);
+
   return (
     <div className='component-style mt-[40px] space-y-4  rounded-[10px] bg-white p-8 dark:bg-dark-accent'>
       <h3>Comments</h3>

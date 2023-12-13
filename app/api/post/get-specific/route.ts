@@ -38,7 +38,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(postDocSnap.data(), { status: 200 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ message: 'failed' }, { status: 400 });
   }
 }

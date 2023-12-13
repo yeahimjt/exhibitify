@@ -41,12 +41,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         description: 'You have been authenticated',
       });
     } catch (error: any) {
-      console.log(error.code);
       // error_object is by default an array, however only one object can be returned
       const error_object = FIREBASE_ERRORS.filter(
         (firebase_error) => firebase_error.code === error.code
       );
-      console.log(error_object);
+
       toast({
         title: error_object[0].title,
         description: error_object[0].description,

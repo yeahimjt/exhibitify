@@ -82,7 +82,6 @@ const PostMenu = ({ post_id, owner_id, type }: PostMenuProps) => {
           description: 'We will look into it immediately',
         });
       }
-      console.log(responseData);
     } catch (error) {
       return;
     }

@@ -2,8 +2,12 @@ import CtaButton from '@/app/components/custom/cta';
 import Feature from '@/app/components/custom/feature';
 import Footer from '@/app/components/footer';
 import NavBar from '@/app/components/navbar/navbar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
+import { handleNewsLetter } from './helper';
+import Newsletter from './components/newsletter';
 
 export default function Home() {
   return (
@@ -52,6 +56,7 @@ export default function Home() {
             }
           />
         </section>
+        <Newsletter />
         <Footer />
       </main>
     </>

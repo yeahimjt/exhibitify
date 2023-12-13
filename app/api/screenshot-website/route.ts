@@ -27,10 +27,8 @@ export async function POST(req: Request) {
 
     // Close the browser
     await browser.close();
-    console.log(screenshot);
-    console.log(user_id);
+
     if (screenshot) {
-      console.log('inside');
       const storageRef = ref(storage, `${user_id}/${url}`);
 
       const downloadURL = await uploadString(
@@ -43,7 +41,6 @@ export async function POST(req: Request) {
       ).then(() => {
         return getDownloadURL(storageRef);
       });
-      console.log(downloadURL);
 
       return NextResponse.json({ downloadURL }, { status: 200 });
     }
