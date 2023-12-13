@@ -10,6 +10,7 @@ import {
 import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   const {
+    post_id,
     title,
     description,
     category,
@@ -18,10 +19,10 @@ export async function POST(req: Request) {
     user_id,
     display_name,
   } = await req.json();
-  const postsCollection = collection(firestore, 'posts');
+  const postsCollection = doc(firestore, 'posts', post_id);
   try {
     // Create new post
-    const postDocSnap = await addDoc(postsCollection, {
+    const postDocSnap = await updateDoc(postsCollection, {
       title,
       description,
       category,
@@ -29,17 +30,10 @@ export async function POST(req: Request) {
       image: portfolio_image,
       owner: user_id,
       displayName: display_name,
-      timestamp: serverTimestamp(),
-      likes: [],
-      comments: [],
-      impressions: 0,
     });
-
-    // Update post to include post id for future reference
-    const createdDoc = doc(firestore, 'posts', postDocSnap.id);
-    await updateDoc(createdDoc, { id: postDocSnap.id });
+    console.log(postDocSnap);
     return NextResponse.json(
-      { status: 'success', post_id: postDocSnap.id },
+      { status: 'success', post_id: post_id },
       { status: 200 }
     );
   } catch (error: any) {

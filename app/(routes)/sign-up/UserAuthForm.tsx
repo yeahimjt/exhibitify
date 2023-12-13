@@ -17,7 +17,9 @@ import {
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { updateUserProfile } from '@/app/helper';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { FirestoreError, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { FIREBASE_ERRORS } from '@/app/constants';
+import { useToast } from '@/components/ui/use-toast';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -32,11 +34,34 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   // Auth instance for google
   const [signInWithGoogle, userGoogle, errorGoogle] = useSignInWithGoogle(auth);
 
+  const { toast } = useToast();
+
   // Users will not be able to submit with empty email or password via required prop in input element
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    await createUserWithEmailAndPassword(auth, email, password);
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(response.operationType);
+      toast({
+        title: 'Sign in success',
+        description: 'You have been authenticated',
+      });
+    } catch (error: any) {
+      // error_object is by default an array, however only one object can be returned
+      const error_object = FIREBASE_ERRORS.filter(
+        (firebase_error) => firebase_error.code === error.code
+      );
+      console.log(error_object);
+      toast({
+        title: error_object[0].title,
+        description: error_object[0].description,
+      });
+    }
     // Create authenticated user within firebase project
     setIsLoading(false);
   }
@@ -78,6 +103,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       }
     }
   }, [user]);
+  console.log(errorGoogle);
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={onSubmit}>
@@ -129,7 +155,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             />
           </div>
           <Button
-            className='bg-my-accent hover:bg-my-accent/90'
+            className='bg-my-accent text-white hover:bg-my-accent/90'
             disabled={isLoading}
             type='submit'
           >

@@ -1,4 +1,5 @@
 'use client';
+import Comments from '@/app/components/commentssection';
 import PostFull from '@/app/components/custom/postfull';
 import NavBar from '@/app/components/navbar/navbar';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -18,6 +19,7 @@ const Page = () => {
       <main>
         <header className='mt-[90px]'>
           <PostFull />
+          <Comments post_id={post_id} />
         </header>
       </main>
     </>

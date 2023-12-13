@@ -1,26 +1,22 @@
 'use client';
 
 import { auth } from '@/app/firebase';
+import { formatTimeSinceUpload } from '@/app/helper';
 import { Posts } from '@/app/types';
 import { Button } from '@/components/ui/button';
-import {
-  Heart,
-  HeartOff,
-  MessagesSquare,
-  MoreVertical,
-  User,
-} from 'lucide-react';
+import { Eye, Heart, HeartOff, MessagesSquare } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import PostMenu from './postmenu';
 type AsyncFunctionType = (
   e: React.SyntheticEvent,
   index: number,
   post_id: string
 ) => Promise<any>;
 type PostPreviewProps = {
-  type: 'user' | 'general';
+  type: 'user' | 'general' | 'likes';
   post: Posts;
   handleLike: AsyncFunctionType;
   index: number;
@@ -32,12 +28,12 @@ const PostPreview = ({ type, post, handleLike, index }: PostPreviewProps) => {
   return (
     <Link
       href={`/posts/${post.id}`}
-      className='flex w-full gap-[10px] rounded-[10px] border border-light-less-text p-[12px] transition-all hover:border-dark-less-text hover:shadow-md dark:border-dark-less-text dark:bg-dark-accent  dark:hover:border-light-less-text'
+      className='flex w-full flex-col gap-[10px] rounded-[10px] border border-light-less-text p-[12px] transition-all hover:border-dark-less-text hover:shadow-md dark:border-dark-less-text dark:bg-dark-accent dark:hover:border-light-less-text  md:flex-row'
     >
       <div className='flex h-[50px] w-[50px] items-center justify-center rounded-full bg-slate-200'>
         <h2>{post.displayName.charAt(0)}</h2>
       </div>
-      <section className='w-[calc(100%-50px)] space-y-1'>
+      <section className='w-full space-y-1 md:w-[calc(100%-70px)]'>
         <div className='flex w-full justify-between '>
           <div>
             <span className='flex gap-[10px]'>
@@ -45,21 +41,24 @@ const PostPreview = ({ type, post, handleLike, index }: PostPreviewProps) => {
                 {post.displayName}
               </h5>
               <h4 className='font-light text-light-less-text dark:text-dark-less-text'>
-                Today, 4:45 PM
+                {post && post?.timestamp
+                  ? formatTimeSinceUpload(post.timestamp)
+                  : ''}
               </h4>
             </span>
             <h5 className='text-light-title dark:text-dark-title'>
               {post.title}
             </h5>
           </div>
-          <span className=''>
-            {type === 'user' || post.owner === user?.uid ? (
-              <MoreVertical />
-            ) : (
-              <Button className='bg-light-subtitle hover:bg-light-title dark:bg-dark-subtitle dark:hover:bg-dark-title'>
-                Visit Site
-              </Button>
-            )}
+          <span className='flex items-center gap-4'>
+            <Button className='bg-light-subtitle hover:bg-light-title dark:bg-dark-subtitle dark:hover:bg-dark-title'>
+              Visit Site
+            </Button>
+            <PostMenu
+              post_id={post.id}
+              owner_id={post.owner}
+              type={'preview'}
+            />
           </span>
         </div>
         <p className=' truncate  text-[14px]'>{post.description}</p>
@@ -94,6 +93,14 @@ const PostPreview = ({ type, post, handleLike, index }: PostPreviewProps) => {
               {post.comments.length} Comments
             </h4>
           </button>
+          {post.owner === user?.uid && (
+            <section className='group flex items-center space-x-2'>
+              <Eye className='text-light-title dark:text-dark-title' />
+              <h4 className='mt-[2px] text-[14px] group-hover:underline'>
+                {post.impressions}
+              </h4>
+            </section>
+          )}
         </span>
       </section>
     </Link>

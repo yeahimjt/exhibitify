@@ -15,6 +15,8 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { FIREBASE_ERRORS } from '@/app/constants';
+import { toast } from '@/components/ui/use-toast';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -32,7 +34,24 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    signInWithEmailAndPassword(auth, email, password);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      toast({
+        title: 'Sign in success',
+        description: 'You have been authenticated',
+      });
+    } catch (error: any) {
+      console.log(error.code);
+      // error_object is by default an array, however only one object can be returned
+      const error_object = FIREBASE_ERRORS.filter(
+        (firebase_error) => firebase_error.code === error.code
+      );
+      console.log(error_object);
+      toast({
+        title: error_object[0].title,
+        description: error_object[0].description,
+      });
+    }
     // Create authenticated user within firebase project
     setIsLoading(false);
   }

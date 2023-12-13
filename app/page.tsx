@@ -2,6 +2,7 @@ import CtaButton from '@/app/components/custom/cta';
 import Feature from '@/app/components/custom/feature';
 import Footer from '@/app/components/footer';
 import NavBar from '@/app/components/navbar/navbar';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 export default function Home() {
@@ -39,7 +40,7 @@ export default function Home() {
             title={'Receive feedback on your portfolio'}
             imageURL={'/images/community.png'}
             description={
-              'Finising a portfolio is tough, often there are obstacles we cant overcome. Seek help from other within our community to perfect the portfolio.'
+              'Finising a portfolio is tough, often there are obstacles we cant overcome. Seek help from others within our community to perfect the portfolio.'
             }
           />
           <Feature

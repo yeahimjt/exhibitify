@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     await page.setViewport({ width: 1200, height: 800 });
 
     // Find a way to timeout
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     // Take a screenshot
     const screenshot = await page.screenshot();

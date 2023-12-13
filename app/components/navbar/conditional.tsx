@@ -23,6 +23,7 @@ import {
   Heart,
   LogOut,
   Mail,
+  Moon,
   MoonIcon,
   PlusIcon,
   Settings,
@@ -44,11 +45,16 @@ const Conditional = () => {
   if (user && !isLoading) {
     return (
       <div className='flex items-center gap-4'>
+        {theme === 'light' ? (
+          <Moon className='cursor-pointer' onClick={() => setTheme('dark')} />
+        ) : (
+          <Sun className='cursor-pointer' onClick={() => setTheme('light')} />
+        )}
         <Link
           href='/new-post'
           className={cn(
             buttonVariants({ variant: 'outline' }),
-            'gap-[5px] text-light-reg-text dark:text-dark-reg-text'
+            'select-none gap-[5px] text-light-reg-text dark:text-dark-reg-text'
           )}
         >
           <PlusIcon className='w-fit' />
@@ -60,15 +66,10 @@ const Conditional = () => {
             className='cursor-pointer select-none rounded-full border'
             asChild
           >
-            {user.photoURL ? (
-              <Image
-                src={user.photoURL || ''}
-                width={45}
-                height={45}
-                alt='user image'
-              />
-            ) : (
-              <UserIcon className='p-1' size={45} />
+            {user && user.displayName && (
+              <div className='flex h-[50px] w-[50px] items-center justify-center rounded-full bg-slate-200'>
+                <h2>{user?.displayName.charAt(0)}</h2>
+              </div>
             )}
           </DropdownMenuTrigger>
           <DropdownMenuContent className='w-56'>
@@ -97,30 +98,16 @@ const Conditional = () => {
                   <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </Link>
-              <Link href='/settings'>
+              {/* <Link href='/settings'>
                 <DropdownMenuItem className='cursor-pointer'>
                   <Settings className='mr-2 h-4 w-4' />
                   <span>Settings</span>
                   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                 </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem
-                className='cursor-pointer'
-                onClick={() =>
-                  theme === 'light' ? setTheme('dark') : setTheme('light')
-                }
-              >
-                {theme === 'light' ? (
-                  <Sun className='mr-2 h-4 w-4' />
-                ) : (
-                  <MoonIcon className='mr-2 h-4 w-4' />
-                )}
-                <span>Toggle Theme</span>
-                <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
-              </DropdownMenuItem>
+              </Link> */}
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/* <DropdownMenuSeparator /> */}
+            {/* <DropdownMenuGroup>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger className='cursor-default'>
                   <UserPlus className='mr-2 h-4 w-4' />
@@ -135,7 +122,7 @@ const Conditional = () => {
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
@@ -151,7 +138,16 @@ const Conditional = () => {
       </div>
     );
   } else {
-    return <CtaButton action='Sign Up' redirect='/sign-up' />;
+    return (
+      <span className='flex items-center space-x-4'>
+        {theme === 'light' ? (
+          <Moon className='cursor-pointer' onClick={() => setTheme('dark')} />
+        ) : (
+          <Sun className='cursor-pointer' onClick={() => setTheme('light')} />
+        )}
+        <CtaButton action='Sign Up' redirect='/sign-up' />
+      </span>
+    );
   }
 };
 

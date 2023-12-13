@@ -1,6 +1,10 @@
+'use client';
 import { Globe } from 'lucide-react';
-import React, { Dispatch } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { category } from '../constants';
+import { collection, doc, getDocs, query, where } from 'firebase/firestore';
+import { firestore } from '../firebase';
+import { useRefreshStore } from '../states';
 
 interface CategoryButtonProps {
   selected: string[];
@@ -18,7 +22,30 @@ const CategoryButton = ({
   postsNum,
   icon,
 }: CategoryButtonProps) => {
-  console.log(selected.includes(value), value);
+  const [postCount, setPostCount] = useState<number>(0);
+  const { refresh, setRefresh } = useRefreshStore((state) => state);
+  async function handleCountPosts() {
+    try {
+      const docCollection = collection(firestore, 'posts');
+      let q;
+      if (value === 'all') {
+        q = query(docCollection);
+      } else {
+        q = query(docCollection, where('category', 'array-contains', value));
+      }
+      const docSnap = await getDocs(q);
+
+      if (docSnap.empty) return;
+
+      setPostCount(docSnap.size);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    handleCountPosts();
+  }, [refresh]);
+
   return (
     <button
       onClick={() =>
@@ -39,7 +66,7 @@ const CategoryButton = ({
           {title}
         </h5>
         <h5 className='text-left text-[14px] text-light-reg-text dark:text-dark-reg-text'>
-          406 Posts
+          {postCount} Posts
         </h5>
       </section>
     </button>

@@ -17,7 +17,7 @@ const Page = () => {
       <NavBar />
       <main className=''>
         <header className='mt-[90px] select-none '>
-          <ActionButtons />
+          {/* <ActionButtons /> */}
           <section className='component-style space-y-4  rounded-[40px] bg-white p-8 dark:bg-dark-accent'>
             <h3>Categories</h3>
             <span className='flex w-full flex-wrap justify-center gap-[20px]   transition-all '>

@@ -13,9 +13,11 @@ import {
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
+  const type = req.nextUrl.searchParams.get('type');
   const user_id = req.nextUrl.searchParams.get('user_id');
   const category = req.nextUrl.searchParams.get('category');
   const offset = req.nextUrl.searchParams.get('offset');
+  const filter = req.nextUrl.searchParams.get('filter');
   const limitNum = 2;
   const conditions = [];
 
@@ -26,17 +28,21 @@ export async function GET(req: NextRequest) {
     conditions.push(orderBy('id'), startAfter(lastDocSnap.data()!.id));
   }
 
-  if (user_id) {
+  if (user_id && type !== 'likes') {
     conditions.push(where('owner', '==', user_id));
   }
   if (category && category !== 'all') {
     console.log(category);
     conditions.push(where('category', 'array-contains', category));
   }
+
+  if (type === 'likes') {
+    conditions.push(where('likes', 'array-contains', user_id));
+  }
+
   try {
     let q;
     if (conditions.length > 0) {
-      console.log('in conditions', conditions);
       q = query(collection(firestore, 'posts'), ...conditions, limit(limitNum));
     } else {
       console.log('in here');
@@ -44,8 +50,7 @@ export async function GET(req: NextRequest) {
     }
     const snapshot = await getDocs(q);
     if (snapshot.empty) {
-      console.log('empty?');
-      return NextResponse.json({ posts: null }, { status: 400 });
+      return NextResponse.json({ posts: [] }, { status: 200 });
     }
     const posts: any = [];
 
@@ -60,7 +65,8 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
+    console.log('in error');
     console.log(error);
-    return NextResponse.json({ posts: null }, { status: 400 });
+    return NextResponse.json({ posts: [] }, { status: 400 });
   }
 }

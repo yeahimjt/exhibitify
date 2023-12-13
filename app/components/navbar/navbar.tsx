@@ -7,7 +7,7 @@ import Conditional from './conditional';
 
 const NavBar = () => {
   return (
-    <nav className=' dark:bg-dark-accent flex w-screen items-center justify-between bg-white py-[20px] shadow-sm'>
+    <nav className=' hidden w-screen items-center justify-between bg-white py-[20px] shadow-sm dark:bg-dark-accent sm:flex'>
       <section className='mx-auto flex w-full max-w-[1024px] items-center justify-between px-[0px]'>
         <section className='flex gap-[30px]'>
           <Link
@@ -23,18 +23,13 @@ const NavBar = () => {
             >
               Explore
             </Link>
-            <Link
-              className='hover:text-light-title dark:hover:text-dark-title'
-              href='/trending'
-            >
-              Trending
-            </Link>
-            <Link
+
+            {/* <Link
               className='hover:text-light-title dark:hover:text-dark-title'
               href='/faq'
             >
               FAQ
-            </Link>
+            </Link> */}
           </span>
         </section>
         <Conditional />

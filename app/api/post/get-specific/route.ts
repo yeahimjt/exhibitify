@@ -1,4 +1,6 @@
 import { firestore } from '@/app/firebase';
+import { hasImpressionCookie, setImpressionCookie } from '@/app/cookie';
+import { cookies } from 'next/headers';
 import {
   collection,
   doc,
@@ -8,12 +10,14 @@ import {
   orderBy,
   query,
   startAfter,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { NextResponse, NextRequest } from 'next/server';
+import { getCookies, getCookie, setCookie, deleteCookie } from 'cookies-next';
 
-export async function GET(req: NextRequest) {
-  const post_id = req.nextUrl.searchParams.get('post_id');
+export async function POST(req: NextRequest) {
+  const { post_id } = await req.json();
   if (!post_id)
     return NextResponse.json({ message: 'failed' }, { status: 400 });
   try {
@@ -22,9 +26,19 @@ export async function GET(req: NextRequest) {
     if (!postDocSnap.exists() || !postDocSnap.data()) {
       return NextResponse.json({ message: 'failed' }, { status: 400 });
     }
-    console.log(postDocSnap.data());
+
+    const hasImpressionCookie =
+      getCookie(`impression_${post_id}`, { cookies }) === 'true';
+    if (!hasImpressionCookie) {
+      await updateDoc(postDoc, {
+        impressions: postDocSnap.data().impressions + 1,
+      });
+      setCookie(`impression_${post_id}`, 'true', { cookies });
+    }
+
     return NextResponse.json(postDocSnap.data(), { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: 'failed' }, { status: 400 });
   }
 }
