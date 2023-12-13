@@ -24,3 +24,18 @@ export const createUserDocument = functions.auth
     };
     db.collection('users').doc(user.uid).set(userWithAdditionalData);
   });
+
+export const sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+  db.collection('mail').add({
+    to: user.email,
+    message: {
+      subject: 'Welcome to exhibitify!',
+      html: `
+      Hey ${user.displayName || ''}!
+      
+      This is the only email you will receive unless you sign up to our newsletter.
+      Thank you for signing up.
+      `,
+    },
+  });
+});

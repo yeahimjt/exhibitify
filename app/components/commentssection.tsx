@@ -8,6 +8,7 @@ import { auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { CommentsList } from '../types';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/components/ui/use-toast';
 
 interface CommentSectionProps {
   post_id: string;
@@ -17,7 +18,7 @@ const Comments = ({ post_id }: CommentSectionProps) => {
   const [user] = useAuthState(auth);
   const [comments, setComments] = useState<CommentsList | null>(null);
   const [userComment, setUserComment] = useState<string | null>(null);
-
+  const { toast } = useToast();
   // Grab focused state to see if user has clicked comment counter
   const { focused, setFocused } = useCommentRefStore((state) => state);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -49,7 +50,14 @@ const Comments = ({ post_id }: CommentSectionProps) => {
   }
 
   async function handleSubmit() {
-    console.log('submitting');
+    if (!user) {
+      setUserComment(null);
+      toast({
+        title: 'Comment failed to submit.',
+        description: 'You must be logged in to comment.',
+      });
+      return;
+    }
     // Create and fetch new comment to append to comment list
     const response = await fetch('/api/comment/create', {
       method: 'POST',
@@ -73,6 +81,10 @@ const Comments = ({ post_id }: CommentSectionProps) => {
       // Comments already exist, append new comment to end
       const updatedComments = [...prevComments, responseData];
       return updatedComments;
+    });
+    toast({
+      title: 'Comment successfully submitted.',
+      description: 'Viewable by others now.',
     });
   }
   console.log(comments);

@@ -1,6 +1,7 @@
 import { Comments } from '@/app/types';
 import { HeartIcon, Reply, UserIcon } from 'lucide-react';
 import React from 'react';
+import CommentMenu from './commentmenu';
 
 interface CommentsProps {
   comment: Comments;
@@ -20,6 +21,7 @@ const Comment = ({ comment }: CommentsProps) => {
           <p className='text-[12px]'>{comment.comment}</p>
         </span>
       </section>
+      <CommentMenu comment_id={comment.id} />
       {/* <section className='flex gap-4'>
         <HeartIcon />
         <Reply />

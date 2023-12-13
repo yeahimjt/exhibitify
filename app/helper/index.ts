@@ -11,8 +11,7 @@ import {
 } from 'firebase/firestore';
 import { firestore } from '../firebase';
 import { Timestamp } from 'firebase/firestore';
-import { ToastActionElement, ToastProps } from '@/components/ui/toast';
-import { useToast } from '@/components/ui/use-toast';
+
 // Handling validation for users portfolio url
 function isValidURL(url: string): boolean {
   const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
@@ -131,6 +130,7 @@ export async function handleReport(
         post_id,
         handled: false,
       });
+
       return true;
     } catch (error) {
       console.log(error);
@@ -151,6 +151,8 @@ export async function handleReport(
       post_id,
       handled: false,
     });
+
+    return true;
   } catch (error) {
     console.log(error);
     return;

@@ -22,47 +22,19 @@ import React, { Dispatch } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 interface PostMenuProps {
-  post_id: string;
-  owner_id: string;
-  type: 'preview' | 'full';
+  comment_id: string;
 }
-const PostMenu = ({ post_id, owner_id, type }: PostMenuProps) => {
+const CommentMenu = ({ comment_id }: PostMenuProps) => {
+  console.log(comment_id);
   const router = useRouter();
   const [user] = useAuthState(auth);
 
   const { toast } = useToast();
   const { setRefresh } = useRefreshStore((state) => state);
-  const handleDelete = async () => {
-    const url = `/api/post/delete`;
 
-    try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          post_id: post_id,
-          user_id: user!.uid,
-        }),
-      });
-      if (response) {
-        toast({
-          title: 'Post deleted successfully',
-          description: 'This action was permanent.',
-        });
-        setRefresh(true);
-      }
-      if (type === 'full') {
-        router.push('/');
-      }
-    } catch (error) {
-      return;
-    }
-  };
   const handleReport = async (e: React.SyntheticEvent, report_type: string) => {
     e.preventDefault();
-    const url = `/api/post/report`;
+    const url = `/api/comment/report`;
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -70,7 +42,7 @@ const PostMenu = ({ post_id, owner_id, type }: PostMenuProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          post_id: post_id,
+          comment_id: comment_id,
           report_type,
           user_id: user!.uid,
         }),
@@ -78,7 +50,7 @@ const PostMenu = ({ post_id, owner_id, type }: PostMenuProps) => {
       const responseData = await response.json();
       if (responseData.status === true) {
         toast({
-          title: 'Post successfully reported',
+          title: 'Comment successfully reported',
           description: 'We will look into it immediately',
         });
       }
@@ -95,42 +67,16 @@ const PostMenu = ({ post_id, owner_id, type }: PostMenuProps) => {
       >
         <MoreVertical size={30} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-[159px]'>
+      <DropdownMenuContent className='w-[200px]'>
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {user?.uid === owner_id && (
-          <>
-            <DropdownMenuItem
-              className='cursor-pointer space-x-2'
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(`/edit-post/${post_id}`);
-              }}
-            >
-              <Edit size={20} />
-              <h5>Edit Post</h5>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className='cursor-pointer space-x-2 text-red-500'
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete();
-              }}
-            >
-              <Trash size={20} />
-              <h5>Delete Post</h5>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-          </>
-        )}
-
         <DropdownMenuSub>
           <DropdownMenuSubTrigger
             className='w-full cursor-default space-x-2 text-orange-500'
             onClick={(e) => e.stopPropagation()}
           >
             <AlertTriangle size={20} />
-            <h5>Report Post</h5>
+            <h5>Report Comment</h5>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent className='space-y-1'>
@@ -155,4 +101,4 @@ const PostMenu = ({ post_id, owner_id, type }: PostMenuProps) => {
   );
 };
 
-export default PostMenu;
+export default CommentMenu;
