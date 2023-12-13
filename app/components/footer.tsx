@@ -33,7 +33,7 @@ const Footer = () => {
         </a>
       </section>
 
-      <section className='flex flex-col gap-[5px]'>
+      {/* <section className='flex flex-col gap-[5px]'>
         <p>Resources</p>
         <a
           className='text-light-less-text dark:text-dark-less-text'
@@ -41,7 +41,7 @@ const Footer = () => {
         >
           FAQ
         </a>
-      </section>
+      </section> */}
     </footer>
   );
 };
