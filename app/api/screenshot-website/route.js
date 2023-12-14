@@ -51,6 +51,7 @@ export async function POST(req) {
       return NextResponse.json({ downloadURL }, { status: 200 });
     }
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { message: `Error screenshotting website, ${error}` },
       { status: 400 }
