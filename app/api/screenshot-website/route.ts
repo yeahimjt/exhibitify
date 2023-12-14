@@ -1,9 +1,16 @@
-import puppeteer from 'puppeteer';
+import { Browser, PuppeteerNode } from 'puppeteer';
 import { NextResponse } from 'next/server';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-
+import chrome from 'chrome-aws-lambda';
 import { storage } from '@/app/firebase';
 
+let puppeteer: PuppeteerNode;
+
+if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  puppeteer = require('puppeteer-core');
+} else {
+  puppeteer = require('puppeteer');
+}
 export async function POST(req: Request) {
   const { url, user_id } = await req.json();
   console.log(url, user_id);
@@ -11,8 +18,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'No url provided' }, { status: 400 });
   }
 
+  let options = {};
+
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    options = {
+      args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+      defaultViewPort: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
+    };
+  }
+
   try {
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.goto(url);
 
