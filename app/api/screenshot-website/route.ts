@@ -6,7 +6,7 @@ import { storage } from '@/app/firebase';
 
 export async function POST(req: Request) {
   const { url, user_id } = await req.json();
-
+  console.log(url, user_id);
   if (!url) {
     return NextResponse.json({ message: 'No url provided' }, { status: 400 });
   }
