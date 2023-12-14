@@ -25,9 +25,6 @@ export async function POST(req) {
     // Adjust viewport and wait for any lazy-loaded content
     await page.setViewport({ width: 1200, height: 800 });
 
-    // Find a way to timeout
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-
     // Take a screenshot
     const screenshot = await page.screenshot();
 
