@@ -22,7 +22,15 @@ export async function POST(req: Request) {
   } = await req.json();
 
   const postsCollection = collection(firestore, 'posts'); // Use client-side Firestore instance
-
+  console.log(
+    title,
+    description,
+    category,
+    portfolio_url,
+    portfolio_image,
+    user_id,
+    display_name
+  );
   try {
     // Create new post
     const postDocSnap = await addDoc(postsCollection, {
