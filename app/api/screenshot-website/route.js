@@ -1,18 +1,24 @@
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser, PuppeteerNode } from 'puppeteer';
 import { NextResponse } from 'next/server';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 
 import { storage } from '@/app/firebase';
 
-export async function POST(req: Request) {
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
+export async function POST(req) {
   const { url, user_id } = await req.json();
-  console.log(url, user_id);
+
   if (!url) {
     return NextResponse.json({ message: 'No url provided' }, { status: 400 });
   }
 
+  let browser = null;
+
   try {
-    const browser = await puppeteer.launch({ headless: 'new' });
+    browser = await puppeteer.connect({
+      browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.NEXT_PRIVATE_BLESS_KEY}`,
+    });
     const page = await browser.newPage();
     await page.goto(url);
 

@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/api/screenshot-website/route.ts"
+    "app/api/screenshot-website/route.js"
   ],
   "exclude": ["node_modules"]
 }
