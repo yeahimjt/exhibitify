@@ -26,7 +26,8 @@ export async function POST(req) {
     await page.setViewport({ width: 1200, height: 800 });
 
     // Take a screenshot
-    await page.waitFor(3000);
+    await new Promise((resolve) => setTimeout(() => resolve(''), 3000));
+
     const screenshot = await page.screenshot();
 
     // Close the browser
