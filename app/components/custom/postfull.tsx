@@ -143,9 +143,16 @@ const PostFull = () => {
             )}
           </div>
           <span className='flex items-center gap-4'>
-            <Button className='bg-light-subtitle hover:bg-light-title dark:bg-dark-subtitle dark:hover:bg-dark-title'>
-              Visit Site
-            </Button>
+            <a
+              target='_blank'
+              rel='noreferrer'
+              href={post?.url}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button className='bg-light-subtitle hover:bg-light-title dark:bg-dark-subtitle dark:hover:bg-dark-title'>
+                Visit Site
+              </Button>
+            </a>
             {post && (
               <PostMenu post_id={post.id} owner_id={post.owner} type={'full'} />
             )}
